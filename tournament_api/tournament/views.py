@@ -1,8 +1,11 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Player, Match
-from .serializers import PlayerSerializer, MatchSerializer
+from .models import Player, Match, Game
+from .serializers import PlayerSerializer, MatchSerializer , GameSerializer
+from rest_framework import status
+from django.http import HttpResponse
+
 
 class PlayerViewSet(viewsets.ModelViewSet):
     queryset = Player.objects.all()
@@ -11,6 +14,9 @@ class PlayerViewSet(viewsets.ModelViewSet):
 class MatchViewSet(viewsets.ModelViewSet):
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
+class GameViewSet(viewsets.ModelViewSet):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
 
     @action(detail=False, methods=['post'])
     def schedule(self, request):
@@ -35,3 +41,17 @@ class MatchViewSet(viewsets.ModelViewSet):
 
         return Response(MatchSerializer(match).data)
 
+    # # Inside your PlayerViewSet
+    # @action(detail=False, methods=['post'])
+    # def clear_all(self, request):
+    #     Player.objects.all().delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    # # Inside your MatchViewSet
+    # @action(detail=False, methods=['post'])
+    # def clear_all(self, request):
+    #     Match.objects.all().delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+
+def home(request):
+    return HttpResponse("Hello, World!")
